@@ -71,14 +71,16 @@ class GeolocationView extends GetView<GeolocationController> {
                         Expanded(
                           child: SingleChildScrollView(
                             scrollDirection: Axis.horizontal,
-                            child: Obx(() => Text(
-                                  controller.address.value,
-                                  style: const TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black,
-                                  ),
-                                )),
+                            child: Obx(
+                              () => Text(
+                                controller.address.value,
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ),
                           ),
                         ),
                         const Icon(
@@ -98,8 +100,23 @@ class GeolocationView extends GetView<GeolocationController> {
         padding: const EdgeInsets.all(20.0),
         child: GestureDetector(
           onTap: () {
-            // Logika tombol
-            Get.toNamed(Routes.BOTTOM_NAVBAR);
+            // Periksa apakah lokasi sudah dipilih
+            if (controller.currentLatLng.value == null) {
+              // Tampilkan Snackbar jika lokasi belum dipilih
+              Get.snackbar(
+                "Lokasi belum dipilih",
+                "Harap pilih lokasi terlebih dahulu sebelum melanjutkan.",
+                backgroundColor: Colors.red,
+                colorText: Colors.white,
+                snackPosition: SnackPosition.BOTTOM,
+                margin: const EdgeInsets.all(10),
+                borderRadius: 8,
+              );
+            } else {
+              // Navigasi jika lokasi sudah dipilih
+              Get.toNamed(Routes.BOTTOM_NAVBAR,
+                  arguments: controller.currentLatLng);
+            }
           },
           child: Container(
             height: 50,

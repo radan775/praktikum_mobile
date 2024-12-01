@@ -31,7 +31,7 @@ class AppPages {
   static final routes = [
     GetPage(
       name: _Paths.HOME,
-      page: () => HomeView(),
+      page: () => HomeView(currentLatLng: Get.arguments),
       binding: HomeBinding(),
     ),
     GetPage(
@@ -51,7 +51,7 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.BOTTOM_NAVBAR,
-      page: () => NavbarView(),
+      page: () => NavbarView(currentLatLng: Get.arguments),
       binding: NavbarBottomBinding(),
     ),
     GetPage(

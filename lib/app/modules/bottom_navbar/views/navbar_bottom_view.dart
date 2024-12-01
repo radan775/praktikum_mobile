@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:praktikum/app/modules/bottom_navbar/controllers/navbar_bottom_controller.dart';
@@ -7,6 +8,9 @@ import 'package:praktikum/app/modules/home/views/home_view.dart';
 import 'package:praktikum/app/modules/http_screen_list/views/http_view.dart';
 
 class NavbarView extends GetView<NavbarController> {
+  final Rx<LatLng?> currentLatLng;
+
+  NavbarView({super.key, required this.currentLatLng});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,7 +22,9 @@ class NavbarView extends GetView<NavbarController> {
             Navigator(
               key: Get.nestedKey(0), // Kunci untuk tab pertama
               onGenerateRoute: (settings) => GetPageRoute(
-                page: () => HomeView(),
+                page: () => HomeView(
+                  currentLatLng: currentLatLng,
+                ),
               ),
             ),
             Navigator(

@@ -1,78 +1,85 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:praktikum/app/data/widgets/product_card.dart';
 import 'package:praktikum/app/modules/home/controllers/home_controller.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:praktikum/app/modules/mikrofon/controllers/mikrofon_controller.dart';
+import 'package:praktikum/app/routes/app_pages.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class HomeView extends GetView<HomeController> {
   final CarouselSliderController carouselController =
       CarouselSliderController();
   final MikrofonController mikrofonController = Get.find<MikrofonController>();
+  final Rx<LatLng?> currentLatLng;
 
   // Menambahkan RxString untuk menyimpan tombol yang dipilih
   RxString selectedButton = 'none'.obs;
 
-  HomeView({super.key});
+  HomeView({super.key, required this.currentLatLng}) {
+    if (currentLatLng.value != null) {
+      controller.updateLocation(currentLatLng.value!);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             // Pencarian
-            Container(
-              width: 300, // Lebar container pencarian
-              padding: const EdgeInsets.symmetric(horizontal: 8),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(8), // Sudut rounded
-              ),
-              child: Row(
-                children: [
-                  const Icon(Icons.search,
-                      color: Colors.black), // Ikon pencarian
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: Obx(
-                      () => TextField(
-                        controller: TextEditingController(
-                          text: mikrofonController.text.value,
-                        )..selection = TextSelection.collapsed(
-                            offset: mikrofonController.text.value.length,
-                          ), // Fokuskan kursor di akhir teks
-                        onChanged: (value) =>
-                            mikrofonController.updateText(value),
-                        decoration: const InputDecoration(
-                          hintText: 'Cari produk...',
-                          hintStyle:
-                              TextStyle(fontSize: 16), // Ukuran font hint
-                          border: InputBorder.none,
+            Expanded(
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(8), // Sudut rounded
+                ),
+                child: Row(
+                  children: [
+                    const Icon(Icons.search,
+                        color: Colors.black), // Ikon pencarian
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Obx(
+                        () => TextField(
+                          controller: TextEditingController(
+                            text: mikrofonController.text.value,
+                          )..selection = TextSelection.collapsed(
+                              offset: mikrofonController.text.value.length,
+                            ), // Fokuskan kursor di akhir teks
+                          onChanged: (value) =>
+                              mikrofonController.updateText(value),
+                          decoration: InputDecoration(
+                            hintText: "Cari hewan...",
+                            hintStyle: const TextStyle(
+                                fontSize: 16), // Ukuran font hint
+                            border: InputBorder.none,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  Obx(() => IconButton(
-                        icon: Icon(
-                          mikrofonController.isListening.value
-                              ? Icons.mic_off
-                              : Icons.mic,
-                          color: mikrofonController.isListening.value
-                              ? Colors.red
-                              : Colors.blue,
-                        ),
-                        onPressed: () {
-                          if (mikrofonController.isListening.value) {
-                            mikrofonController.stopListening();
-                          } else {
-                            mikrofonController.startListening();
-                          }
-                        },
-                      )),
-                ],
+                    Obx(() => IconButton(
+                          icon: Icon(
+                            mikrofonController.isListening.value
+                                ? Icons.mic_off
+                                : Icons.mic,
+                            color: mikrofonController.isListening.value
+                                ? Colors.red
+                                : Colors.blue,
+                          ),
+                          onPressed: () {
+                            if (mikrofonController.isListening.value) {
+                              mikrofonController.stopListening();
+                            } else {
+                              mikrofonController.startListening();
+                            }
+                          },
+                        )),
+                  ],
+                ),
               ),
             ),
             // Keranjang
@@ -80,6 +87,13 @@ class HomeView extends GetView<HomeController> {
               icon: const Icon(Icons.shopping_cart),
               onPressed: () {
                 print("Keranjang ditekan");
+              },
+            ),
+            // Chat
+            IconButton(
+              icon: const Icon(Icons.chat),
+              onPressed: () {
+                print("Chat ditekan");
               },
             ),
           ],
@@ -190,173 +204,227 @@ class HomeView extends GetView<HomeController> {
             ),
             // Filter Categories
             Padding(
-              padding: const EdgeInsets.only(
-                  left: 15, right: 15, bottom: 10), // Menambahkan padding kiri
-              child: Row(
-                mainAxisAlignment:
-                    MainAxisAlignment.start, // Memastikan dimulai dari kiri
+              padding: const EdgeInsets.only(left: 15, right: 15, bottom: 10),
+              child: Column(
                 children: [
-                  // Filter Button dengan gradien latar belakang saat dipilih
-                  Obx(() {
-                    return OutlinedButton(
-                      onPressed: () {
-                        // Jika tombol yang sama diklik, reset ke 'none'
-                        if (selectedButton.value == 'filter') {
-                          selectedButton.value = 'none';
-                        } else {
-                          selectedButton.value = 'filter'; // Menyimpan status
-                        }
-                        print("Filter clicked");
-                      },
-                      style: OutlinedButton.styleFrom(
-                        side: BorderSide(
-                          color: selectedButton.value == 'filter'
-                              ? Colors.green // Warna hijau saat terpilih
-                              : Colors
-                                  .transparent, // Tidak ada border jika tidak terpilih
-                        ),
-                        backgroundColor: selectedButton.value == 'filter'
-                            ? Color(0xFF56ab2f) // Warna hijau saat terpilih
-                            : Colors
-                                .transparent, // Tidak ada background jika tidak terpilih
-                        shape: RoundedRectangleBorder(
-                          borderRadius:
-                              BorderRadius.circular(8), // Sudut rounded
-                        ),
-                      ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 1.0, right: 2.0),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
                       child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Icon(Icons.filter_alt_outlined,
-                              color: selectedButton.value == 'filter'
-                                  ? Colors.white
-                                  : Colors.green), // Ikon filter
-                          SizedBox(width: 5), // Jarak antara ikon dan teks
-                          Text(
-                            "Filter",
-                            style: TextStyle(
-                              color: selectedButton.value == 'filter'
-                                  ? Colors.white
-                                  : Colors.green,
+                          InkWell(
+                            onTap: () async {
+                              final selectedLatLng =
+                                  await Get.toNamed(Routes.MAPS_LOCATION);
+                              if (selectedLatLng != null &&
+                                  selectedLatLng is LatLng) {
+                                controller.updateLocation(selectedLatLng);
+                                print("Lokasi terpilih: $selectedLatLng");
+                              } else {
+                                print("Tidak ada lokasi yang dipilih");
+                              }
+                            },
+                            child: Row(
+                              children: [
+                                Icon(
+                                  Icons.location_on,
+                                  color: Colors.red, // Warna ikon lokasi
+                                  size: 20,
+                                ),
+                                SizedBox(
+                                    width: 4), // Jarak antara ikon dan teks
+                                Text(
+                                  "Lokasi: ",
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                          Expanded(
+                            child: SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: Obx(
+                                () => Text(
+                                  controller.address.value,
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.grey[
+                                        800], // Warna abu-abu gelap untuk teks
+                                    fontStyle: FontStyle
+                                        .italic, // Menambahkan gaya italic
+                                  ),
+                                ),
+                              ),
                             ),
                           ),
                         ],
                       ),
-                    );
-                  }),
-                  // Sapi Button
-                  Obx(() {
-                    return TextButton(
-                      onPressed: () {
-                        // Jika tombol yang sama diklik, reset ke 'none'
-                        if (selectedButton.value == 'sapi') {
-                          selectedButton.value = 'none';
-                        } else {
-                          selectedButton.value = 'sapi'; // Menyimpan status
-                        }
-                        print("Sapi clicked");
-                      },
-                      style: TextButton.styleFrom(
-                        side: BorderSide(
-                          color: selectedButton.value == 'sapi'
-                              ? Colors.green // Warna hijau saat terpilih
-                              : Colors
-                                  .transparent, // Tidak ada border jika tidak terpilih
-                        ),
-                        backgroundColor: selectedButton.value == 'sapi'
-                            ? Color(0xFF56ab2f) // Warna hijau saat terpilih
-                            : Colors
-                                .transparent, // Tidak ada background jika tidak terpilih
-                        shape: RoundedRectangleBorder(
-                          borderRadius:
-                              BorderRadius.circular(8), // Sudut rounded
-                        ),
-                      ),
-                      child: Text(
-                        "Sapi",
-                        style: TextStyle(
-                          color: selectedButton.value == 'sapi'
-                              ? Colors.white
-                              : Colors.green,
-                        ),
-                      ),
-                    );
-                  }),
-                  // Kambing Button
-                  Obx(() {
-                    return TextButton(
-                      onPressed: () {
-                        // Jika tombol yang sama diklik, reset ke 'none'
-                        if (selectedButton.value == 'kambing') {
-                          selectedButton.value = 'none';
-                        } else {
-                          selectedButton.value = 'kambing'; // Menyimpan status
-                        }
-                        print("Kambing clicked");
-                      },
-                      style: TextButton.styleFrom(
-                        side: BorderSide(
-                          color: selectedButton.value == 'kambing'
-                              ? Colors.green // Warna hijau saat terpilih
-                              : Colors
-                                  .transparent, // Tidak ada border jika tidak terpilih
-                        ),
-                        backgroundColor: selectedButton.value == 'kambing'
-                            ? Color(0xFF56ab2f) // Warna hijau saat terpilih
-                            : Colors
-                                .transparent, // Tidak ada background jika tidak terpilih
-                        shape: RoundedRectangleBorder(
-                          borderRadius:
-                              BorderRadius.circular(8), // Sudut rounded
-                        ),
-                      ),
-                      child: Text(
-                        "Kambing",
-                        style: TextStyle(
-                          color: selectedButton.value == 'kambing'
-                              ? Colors.white
-                              : Colors.green,
-                        ),
-                      ),
-                    );
-                  }),
-                  // Domba Button
-                  Obx(() {
-                    return TextButton(
-                      onPressed: () {
-                        // Jika tombol yang sama diklik, reset ke 'none'
-                        if (selectedButton.value == 'domba') {
-                          selectedButton.value = 'none';
-                        } else {
-                          selectedButton.value = 'domba'; // Menyimpan status
-                        }
-                        print("Domba clicked");
-                      },
-                      style: TextButton.styleFrom(
-                        side: BorderSide(
-                          color: selectedButton.value == 'domba'
-                              ? Colors.green // Warna hijau saat terpilih
-                              : Colors
-                                  .transparent, // Tidak ada border jika tidak terpilih
-                        ),
-                        backgroundColor: selectedButton.value == 'domba'
-                            ? Color(0xFF56ab2f) // Warna hijau saat terpilih
-                            : Colors
-                                .transparent, // Tidak ada background jika tidak terpilih
-                        shape: RoundedRectangleBorder(
-                          borderRadius:
-                              BorderRadius.circular(8), // Sudut rounded
-                        ),
-                      ),
-                      child: Text(
-                        "Domba",
-                        style: TextStyle(
-                          color: selectedButton.value == 'domba'
-                              ? Colors.white
-                              : Colors.green,
-                        ),
-                      ),
-                    );
-                  }),
+                    ),
+                  ),
+                  Row(
+                    mainAxisAlignment:
+                        MainAxisAlignment.start, // Dimulai dari kiri
+                    children: [
+                      // Tombol Filter
+                      Obx(() {
+                        return TextButton(
+                          onPressed: () {
+                            selectedButton.value =
+                                selectedButton.value == 'filter'
+                                    ? 'none'
+                                    : 'filter';
+                            print("Filter clicked");
+                          },
+                          style: TextButton.styleFrom(
+                            backgroundColor: selectedButton.value == 'filter'
+                                ? Colors.green.withOpacity(
+                                    0.8) // Warna hijau transparan saat dipilih
+                                : Colors.grey
+                                    .withOpacity(0.1), // Warna latar default
+                            shape: RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.circular(12), // Sudut membulat
+                            ),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 16,
+                                vertical: 12), // Spasi dalam tombol
+                          ),
+                          child: Row(
+                            mainAxisSize:
+                                MainAxisSize.min, // Ukuran sesuai konten
+                            children: [
+                              Icon(
+                                Icons.filter_alt, // Ikon filter
+                                color: selectedButton.value == 'filter'
+                                    ? Colors.white
+                                    : Colors.green,
+                                size: 16, // Ukuran ikon lebih kecil
+                              ),
+                              SizedBox(width: 8), // Jarak antara ikon dan teks
+                              Text(
+                                "Filter",
+                                style: TextStyle(
+                                  color: selectedButton.value == 'filter'
+                                      ? Colors.white
+                                      : Colors.green,
+                                  fontSize: 12, // Ukuran teks lebih kecil
+                                  fontWeight: FontWeight.bold, // Teks tebal
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      }),
+                      SizedBox(width: 10), // Jarak antar tombol
+                      // Tombol Sapi
+                      Obx(() {
+                        return TextButton(
+                          onPressed: () {
+                            selectedButton.value =
+                                selectedButton.value == 'sapi'
+                                    ? 'none'
+                                    : 'sapi';
+                            print("Sapi clicked");
+                          },
+                          style: TextButton.styleFrom(
+                            backgroundColor: selectedButton.value == 'sapi'
+                                ? Colors.orangeAccent.withOpacity(
+                                    0.8) // Warna oranye saat dipilih
+                                : Colors.grey.withOpacity(0.1),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 12),
+                          ),
+                          child: Text(
+                            "Sapi",
+                            style: TextStyle(
+                              color: selectedButton.value == 'sapi'
+                                  ? Colors.white
+                                  : Colors.orange,
+                              fontSize: 12, // Ukuran teks lebih kecil
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        );
+                      }),
+                      SizedBox(width: 10),
+                      // Tombol Kambing
+                      Obx(() {
+                        return TextButton(
+                          onPressed: () {
+                            selectedButton.value =
+                                selectedButton.value == 'kambing'
+                                    ? 'none'
+                                    : 'kambing';
+                            print("Kambing clicked");
+                          },
+                          style: TextButton.styleFrom(
+                            backgroundColor: selectedButton.value == 'kambing'
+                                ? Colors.purple
+                                    .withOpacity(0.8) // Warna ungu saat dipilih
+                                : Colors.grey.withOpacity(0.1),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 12),
+                          ),
+                          child: Text(
+                            "Kambing",
+                            style: TextStyle(
+                              color: selectedButton.value == 'kambing'
+                                  ? Colors.white
+                                  : Colors.purple,
+                              fontSize: 12, // Ukuran teks lebih kecil
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        );
+                      }),
+                      SizedBox(width: 10),
+                      // Tombol Domba
+                      Obx(() {
+                        return TextButton(
+                          onPressed: () {
+                            selectedButton.value =
+                                selectedButton.value == 'domba'
+                                    ? 'none'
+                                    : 'domba';
+                            print("Domba clicked");
+                          },
+                          style: TextButton.styleFrom(
+                            backgroundColor: selectedButton.value == 'domba'
+                                ? Colors.blueAccent
+                                    .withOpacity(0.8) // Warna biru saat dipilih
+                                : Colors.grey.withOpacity(0.1),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 12),
+                          ),
+                          child: Text(
+                            "Domba",
+                            style: TextStyle(
+                              color: selectedButton.value == 'domba'
+                                  ? Colors.white
+                                  : Colors.blue,
+                              fontSize: 12, // Ukuran teks lebih kecil
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        );
+                      }),
+                    ],
+                  )
                 ],
               ),
             ),
