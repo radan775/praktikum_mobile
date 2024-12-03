@@ -181,7 +181,7 @@ class MapsLocationView extends GetView<MapsLocationController> {
                     const SizedBox(height: 8.0),
                     ElevatedButton.icon(
                       onPressed: () {
-                        controller.openGoogleMaps;
+                        controller.openGoogleMaps();
                       },
                       icon: const Icon(Icons.map),
                       label: const Text('Buka Google Maps'),

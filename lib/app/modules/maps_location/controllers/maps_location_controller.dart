@@ -97,9 +97,9 @@ class MapsLocationController extends GetxController {
 
   // Membuka Google Maps
   void openGoogleMaps() {
-    if (currentPosition.value != null) {
+    if (lastGeocodedLatLng.value != null) {
       final url = Uri.parse(
-          'https://www.google.com/maps?q=${currentPosition.value!.latitude},${currentPosition.value!.longitude}');
+          'https://www.google.com/maps?q=${lastGeocodedLatLng.value!.latitude},${lastGeocodedLatLng.value!.longitude}');
       _launchURL(url);
     }
   }

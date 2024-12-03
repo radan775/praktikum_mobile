@@ -15,7 +15,7 @@ class HomeView extends GetView<HomeController> {
   final Rx<LatLng?> currentLatLng;
 
   // Menambahkan RxString untuk menyimpan tombol yang dipilih
-  RxString selectedButton = 'none'.obs;
+  final RxString selectedButton = 'none'.obs;
 
   HomeView({super.key, required this.currentLatLng}) {
     if (currentLatLng.value != null) {
@@ -119,67 +119,44 @@ class HomeView extends GetView<HomeController> {
           children: [
             // Carousel Image Slider
             CarouselSlider(
-              carouselController:
-                  carouselController, // Menggunakan CarouselSliderController
               options: CarouselOptions(
-                height: 200.0, // Menentukan tinggi carousel
-                autoPlay: true, // Menyalakan auto play
-                autoPlayInterval: Duration(seconds: 3), // Interval per gambar
-                enlargeCenterPage: true, // Memperbesar gambar yang aktif
-                onPageChanged: (index, reason) {
-                  // Update variabel reaktif ketika page berubah
-                  controller.currentIndex.value = index;
-                },
+                height: 200.0, // Tinggi carousel
+                autoPlay: true, // Auto play
+                autoPlayInterval: Duration(seconds: 3), // Interval tiap gambar
+                enlargeCenterPage: true, // Perbesar gambar yang aktif
+                viewportFraction: 0.8, // Fraksi tampilan gambar
               ),
               items: [
-                // Item pertama (gambar atau teks)
+                // Gambar pertama
                 Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(16),
-                    color: Colors.blue,
-                  ),
-                  child: Center(
-                    child: Text(
-                      "Promo 1: Diskon besar!",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
+                    image: DecorationImage(
+                      image: NetworkImage(
+                          'https://cdn0-production-images-kly.akamaized.net/zglhMgghWeRInbNk8nWENiq0XYo=/640x640/smart/filters:quality(75):strip_icc():format(webp)/kly-media-production/medias/3513930/original/066798000_1626578591-IMG-20210717-WA0006.jpg'),
+                      fit: BoxFit.cover,
                     ),
                   ),
                 ),
-                // Item kedua (gambar atau teks)
+                // Gambar kedua
                 Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(16),
-                    color: Colors.red,
-                  ),
-                  child: Center(
-                    child: Text(
-                      "Promo 2: Beli 1 Gratis 1!",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
+                    image: DecorationImage(
+                      image: NetworkImage(
+                          'https://storage.nu.or.id/storage/post/16_9/mid/screenshot-2023-06-19-10-46-11-59-99c04817c0de5652397fc8b56c3b3817_1687146402.webp'),
+                      fit: BoxFit.cover,
                     ),
                   ),
                 ),
-                // Item ketiga (gambar atau teks)
+                // Gambar ketiga
                 Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(16),
-                    color: Colors.green,
-                  ),
-                  child: Center(
-                    child: Text(
-                      "Promo 3: Diskon 50%",
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
+                    image: DecorationImage(
+                      image: NetworkImage(
+                          'https://donasi.yatimmandiri.org/_next/image?url=https%3A%2F%2Fdonasi.yatimmandiri.org%2Fstorage%2Fuploads%2F0qiGJQ57C3yOdHzcHX55Z7rAJs4uZHXm4ZtMEoAq.jpg&w=3840&q=75'),
+                      fit: BoxFit.cover,
                     ),
                   ),
                 ),
