@@ -427,7 +427,9 @@ class HomeView extends GetView<HomeController> {
                     productName: 'Men Linen Pants',
                     price: 199.99,
                     currency: '\$', // Default is '$'
-                    onTap: () {},
+                    onTap: () {
+                      Get.toNamed(Routes.DETAIL_PRODUCT);
+                    },
                     onFavoritePressed: () {},
                     shortDescription: 'comfortable & airy.',
                     rating: 4.2,

@@ -1,6 +1,8 @@
 import 'package:get/get.dart';
 import 'package:praktikum/app/modules/bottom_navbar/bindings/navbar_bottom_binding.dart';
 import 'package:praktikum/app/modules/bottom_navbar/views/navbar_bottom_view.dart';
+import 'package:praktikum/app/modules/detail_product/bindings/detailproduct_binding.dart';
+import 'package:praktikum/app/modules/detail_product/views/detailproduct_view.dart';
 import 'package:praktikum/app/modules/forgot_password/bindings/forgot_binding.dart';
 import 'package:praktikum/app/modules/forgot_password/views/forgot_view.dart';
 import 'package:praktikum/app/modules/geolocation/bindings/geolocation_binding.dart';
@@ -78,6 +80,11 @@ class AppPages {
       name: _Paths.MIKROFON,
       page: () => MikrofonView(),
       binding: MikrofonBinding(),
-    )
+    ),
+    GetPage(
+      name: _Paths.DETAIL_PRODUCT,
+      page: () => DetailProductView(),
+      binding: DetailProductBinding(),
+    ),
   ];
 }

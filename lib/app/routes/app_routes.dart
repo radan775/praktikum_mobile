@@ -13,6 +13,7 @@ abstract class Routes {
   static const GEOLOCATION = _Paths.GEOLOCATION;
   static const MAPS_LOCATION = _Paths.MAPS_LOCATION;
   static const MIKROFON = _Paths.MIKROFON;
+  static const DETAIL_PRODUCT = _Paths.DETAIL_PRODUCT;
 }
 
 abstract class _Paths {
@@ -27,4 +28,5 @@ abstract class _Paths {
   static const GEOLOCATION = '/geolocation';
   static const MAPS_LOCATION = '/maps_location';
   static const MIKROFON = '/mikrofon';
+  static const DETAIL_PRODUCT = '/detail_product';
 }
