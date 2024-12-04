@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:praktikum/app/modules/register/controllers/register_controller.dart';
+import 'package:praktikum/app/routes/app_pages.dart';
 
 class RegisterView extends GetView<RegisterController> {
   const RegisterView({super.key});
@@ -29,6 +30,7 @@ class RegisterView extends GetView<RegisterController> {
                 const SizedBox(height: 30),
                 // Input Nama Lengkap
                 TextField(
+                  controller: controller.nameController,
                   decoration: InputDecoration(
                     labelText: 'Nama Lengkap',
                     border: OutlineInputBorder(
@@ -39,6 +41,7 @@ class RegisterView extends GetView<RegisterController> {
                 const SizedBox(height: 16),
                 // Input Nomor HP
                 TextField(
+                  controller: controller.phoneController,
                   decoration: InputDecoration(
                     labelText: 'Nomor HP',
                     border: OutlineInputBorder(
@@ -53,6 +56,7 @@ class RegisterView extends GetView<RegisterController> {
                 const SizedBox(height: 16),
                 // Input Password
                 TextField(
+                  controller: controller.passwordController,
                   obscureText: true,
                   decoration: InputDecoration(
                     labelText: 'Password',
@@ -65,6 +69,7 @@ class RegisterView extends GetView<RegisterController> {
                 const SizedBox(height: 16),
                 // Input Konfirmasi Password
                 TextField(
+                  controller: controller.confirmPasswordController,
                   obscureText: true,
                   decoration: InputDecoration(
                     labelText: 'Konfirmasi Password',
@@ -76,10 +81,8 @@ class RegisterView extends GetView<RegisterController> {
                 ),
                 const SizedBox(height: 30),
                 // Tombol Daftar
-                GestureDetector(
-                  onTap: () {
-                    print("REGISTER PRESSED");
-                  },
+                InkWell(
+                  onTap: controller.register,
                   child: Container(
                     height: 50,
                     decoration: BoxDecoration(

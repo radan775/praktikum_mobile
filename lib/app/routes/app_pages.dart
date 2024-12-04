@@ -1,6 +1,8 @@
 import 'package:get/get.dart';
 import 'package:praktikum/app/modules/bottom_navbar/bindings/navbar_bottom_binding.dart';
 import 'package:praktikum/app/modules/bottom_navbar/views/navbar_bottom_view.dart';
+import 'package:praktikum/app/modules/cart/bindings/cart_binding.dart';
+import 'package:praktikum/app/modules/cart/views/cart_view.dart';
 import 'package:praktikum/app/modules/detail_product/bindings/detailproduct_binding.dart';
 import 'package:praktikum/app/modules/detail_product/views/detailproduct_view.dart';
 import 'package:praktikum/app/modules/forgot_password/bindings/forgot_binding.dart';
@@ -17,6 +19,8 @@ import 'package:praktikum/app/modules/mikrofon/bindings/mikrofon_binding.dart';
 import 'package:praktikum/app/modules/mikrofon/views/mikrofon_views.dart';
 import 'package:praktikum/app/modules/register/bindings/register_binding.dart';
 import 'package:praktikum/app/modules/register/views/register_view.dart';
+import 'package:praktikum/app/modules/reset_password/bindings/reset_password_binding.dart';
+import 'package:praktikum/app/modules/reset_password/views/reset_password_view.dart';
 import 'package:praktikum/app/modules/webview/bindings/webview_binding.dart';
 import 'package:praktikum/app/modules/webview/views/webview_view.dart';
 
@@ -86,5 +90,15 @@ class AppPages {
       page: () => DetailProductView(),
       binding: DetailProductBinding(),
     ),
+    GetPage(
+      name: _Paths.RESET_PASSWORD,
+      page: () => ResetPasswordView(),
+      binding: ResetPasswordBinding(),
+    ),
+    GetPage(
+      name: _Paths.CART,
+      page: () => CartView(),
+      binding: CartBinding(),
+    )
   ];
 }

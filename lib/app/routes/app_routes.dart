@@ -14,6 +14,8 @@ abstract class Routes {
   static const MAPS_LOCATION = _Paths.MAPS_LOCATION;
   static const MIKROFON = _Paths.MIKROFON;
   static const DETAIL_PRODUCT = _Paths.DETAIL_PRODUCT;
+  static const RESET_PASSWORD = _Paths.RESET_PASSWORD;
+  static const CART = _Paths.CART;
 }
 
 abstract class _Paths {
@@ -29,4 +31,6 @@ abstract class _Paths {
   static const MAPS_LOCATION = '/maps_location';
   static const MIKROFON = '/mikrofon';
   static const DETAIL_PRODUCT = '/detail_product';
+  static const RESET_PASSWORD = '/reset_password';
+  static const CART = '/cart';
 }

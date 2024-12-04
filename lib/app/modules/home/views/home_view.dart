@@ -86,7 +86,7 @@ class HomeView extends GetView<HomeController> {
             IconButton(
               icon: const Icon(Icons.shopping_cart),
               onPressed: () {
-                print("Keranjang ditekan");
+                Get.toNamed(Routes.CART);
               },
             ),
             // Chat

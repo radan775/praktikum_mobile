@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:praktikum/app/modules/forgot_password/controllers/forgot_controller.dart';
+import 'package:praktikum/app/routes/app_pages.dart';
 
 class ForgotPasswordView extends GetView<ForgotPasswordController> {
   const ForgotPasswordView({super.key});
@@ -96,7 +97,9 @@ class ForgotPasswordView extends GetView<ForgotPasswordController> {
                       const SizedBox(height: 16),
                       // Tombol Atur Ulang Password
                       GestureDetector(
-                        onTap: controller.resetPassword,
+                        onTap: () {
+                          Get.toNamed(Routes.RESET_PASSWORD);
+                        },
                         child: Container(
                           height: 50,
                           decoration: BoxDecoration(
