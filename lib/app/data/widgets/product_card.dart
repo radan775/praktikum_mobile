@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 /// A customizable card widget for displaying product information.
 class ProductCard extends StatefulWidget {
@@ -47,6 +48,9 @@ class ProductCard extends StatefulWidget {
   /// The discount percentage of the product (optional).
   final double? discountPercentage;
 
+  /// The number of products sold (optional).
+  final int? soldCount;
+
   /// Creates a [ProductCard] widget.
   const ProductCard({
     super.key,
@@ -65,6 +69,7 @@ class ProductCard extends StatefulWidget {
     this.borderRadius = 12.0,
     this.rating,
     this.discountPercentage,
+    this.soldCount,
   });
 
   @override
@@ -101,11 +106,9 @@ class ProductCardState extends State<ProductCard> {
                     fit: BoxFit.cover,
                     height: 170,
                     width: double.infinity,
-                    // Penanganan error
                     errorBuilder: (context, error, stackTrace) {
-                      // Gambar blank atau kosong jika gagal dimuat
                       return Container(
-                        color: Colors.grey[200], // Warna latar belakang kosong
+                        color: Colors.grey[200],
                         height: 170,
                         width: double.infinity,
                         child: Center(
@@ -143,31 +146,29 @@ class ProductCardState extends State<ProductCard> {
             ),
             // Product details
             Padding(
-              padding: const EdgeInsets.all(12.0),
+              padding: const EdgeInsets.all(10.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     widget.categoryName,
                     style: TextStyle(
-                      fontSize: 16,
+                      fontSize: 13,
                       fontWeight: FontWeight.bold,
                       color: widget.textColor.withOpacity(0.6),
                     ),
                   ),
-                  const SizedBox(height: 4),
                   Text(
                     widget.productName,
                     style: TextStyle(
-                      fontSize: 18,
+                      fontSize: 15,
                       fontWeight: FontWeight.bold,
                       color: widget.textColor,
                     ),
                   ),
-                  // Short description (if provided)
                   if (widget.shortDescription!.isNotEmpty)
                     Padding(
-                      padding: const EdgeInsets.only(top: 6.0),
+                      padding: const EdgeInsets.only(top: 2.0),
                       child: Text(
                         widget.shortDescription!,
                         style: TextStyle(
@@ -176,29 +177,52 @@ class ProductCardState extends State<ProductCard> {
                         ),
                       ),
                     ),
-                  // Product rating (if available)
-                  if (widget.rating != null)
+                  if (widget.rating != null || widget.soldCount != null)
                     Padding(
-                      padding: const EdgeInsets.only(top: 8.0),
+                      padding: const EdgeInsets.only(top: 2.0),
                       child: Row(
-                        children: List.generate(
-                          5,
-                          (index) => Icon(
-                            index < widget.rating!.round()
-                                ? Icons.star
-                                : Icons.star_border,
-                            color: Colors.orange,
-                            size: 16,
-                          ),
-                        ),
+                        children: [
+                          if (widget.rating != null) ...[
+                            Icon(
+                              Icons.star,
+                              color: Colors.orange,
+                              size: 16,
+                            ),
+                            const SizedBox(width: 4),
+                            Text(
+                              widget.rating.toString(),
+                              style: const TextStyle(
+                                fontSize: 15,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ],
+                          if (widget.rating != null &&
+                              widget.soldCount != null) ...[
+                            const SizedBox(width: 8),
+                            const Text(
+                              '·',
+                              style: TextStyle(
+                                fontSize: 18,
+                                color: Colors.black54,
+                              ),
+                            ),
+                            const SizedBox(width: 6),
+                          ],
+                          if (widget.soldCount != null)
+                            Text(
+                              '${_formatSoldCount(widget.soldCount!)} terjual',
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: widget.textColor.withOpacity(0.7),
+                              ),
+                            ),
+                        ],
                       ),
                     ),
-                  const SizedBox(height: 8),
-                  // Row for availability and discount
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      // Product availability
                       if (widget.isAvailable!)
                         const Row(
                           children: [
@@ -237,7 +261,6 @@ class ProductCardState extends State<ProductCard> {
                             ),
                           ],
                         ),
-                      // Product discount
                       if (widget.discountPercentage != null)
                         Text(
                           '${widget.discountPercentage?.toStringAsFixed(0)}% OFF',
@@ -249,12 +272,10 @@ class ProductCardState extends State<ProductCard> {
                         ),
                     ],
                   ),
-                  const SizedBox(height: 8),
-                  // Product price at the bottom
                   Padding(
                     padding: const EdgeInsets.only(top: 8.0),
                     child: Text(
-                      '${widget.currency}${widget.price.toStringAsFixed(2)}',
+                      '${widget.currency}${_formatPrice(widget.price)}',
                       style: TextStyle(
                         color: widget.textColor,
                         fontWeight: FontWeight.bold,
@@ -269,5 +290,17 @@ class ProductCardState extends State<ProductCard> {
         ),
       ),
     );
+  }
+
+  String _formatSoldCount(int soldCount) {
+    if (soldCount >= 1000) {
+      return '${(soldCount / 1000).floor()}rb+';
+    }
+    return '$soldCount+';
+  }
+
+  String _formatPrice(double price) {
+    // Format angka dengan pemisah ribuan
+    return NumberFormat.decimalPattern('id').format(price);
   }
 }

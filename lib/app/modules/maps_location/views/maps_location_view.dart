@@ -9,8 +9,13 @@ class MapsLocationView extends GetView<MapsLocationController> {
   @override
   Widget build(BuildContext context) {
     // Memastikan izin lokasi diminta saat pertama kali widget ditampilkan
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      controller.getCurrentLocation();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await controller.getCurrentLocation();
+      if (controller.currentLatLng.value != null) {
+        controller.mapController?.animateCamera(
+          CameraUpdate.newLatLng(controller.currentLatLng.value!),
+        );
+      }
     });
 
     return Scaffold(

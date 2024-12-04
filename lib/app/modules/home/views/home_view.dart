@@ -181,7 +181,7 @@ class HomeView extends GetView<HomeController> {
             ),
             // Filter Categories
             Padding(
-              padding: const EdgeInsets.only(left: 15, right: 15, bottom: 10),
+              padding: const EdgeInsets.only(left: 15, right: 15, bottom: 5),
               child: Column(
                 children: [
                   Padding(
@@ -412,26 +412,27 @@ class HomeView extends GetView<HomeController> {
                   NeverScrollableScrollPhysics(), // Menonaktifkan scroll pada grid
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2, // Menampilkan 2 kartu per baris
-                crossAxisSpacing: 5.0, // Jarak antar kartu secara horizontal
+                crossAxisSpacing: 4.0, // Jarak antar kartu secara horizontal
                 mainAxisSpacing: 8.0, // Jarak antar kartu secara vertikal
-                mainAxisExtent: 391,
+                mainAxisExtent: 345,
               ),
               itemCount: 9, // Jumlah total kartu
               itemBuilder: (context, index) {
                 return Padding(
-                  padding: EdgeInsets.all(8.0), // Jarak antar kartu
+                  padding: EdgeInsets.all(0.5), // Jarak antar kartu
                   child: ProductCard(
                     imageUrl:
                         'https://www.swiss-farmers.ch/app/uploads/2023/10/schweizer-baeuerinnen-und-bauern_rindvieh-1200x900.jpg',
                     categoryName: 'Sapi',
-                    productName: 'Men Linen Pants',
-                    price: 199.99,
-                    currency: '\$', // Default is '$'
+                    productName: 'Sapi Jantan Simenttal',
+                    price: 21500000,
+                    currency: 'Rp',
+                    soldCount: 1000,
                     onTap: () {
                       Get.toNamed(Routes.DETAIL_PRODUCT);
                     },
                     onFavoritePressed: () {},
-                    shortDescription: 'comfortable & airy.',
+                    shortDescription: 'sapi siap kurban',
                     rating: 4.2,
                     discountPercentage: 35.0,
                     isAvailable: true,
