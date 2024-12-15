@@ -1,9 +1,10 @@
 import 'package:get/get.dart';
 
 class NavbarController extends GetxController {
-  var selectedIndex = 0.obs; // Observable index for selected tab
-
+  // Index tab yang aktif
+  RxInt selectedIndex = 0.obs;
+  // Fungsi untuk mengubah tab
   void changeTab(int index) {
-    selectedIndex.value = index; // Update the selected tab
+    selectedIndex.value = index;
   }
 }

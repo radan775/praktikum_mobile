@@ -67,7 +67,7 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.INI_WEBVIEW,
-      page: () => IniWebviewView(article: Get.arguments),
+      page: () => IniWebviewView(url_webview: Get.arguments),
       binding: IniWebviewBinding(),
     ),
     GetPage(
@@ -87,7 +87,7 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.DETAIL_PRODUCT,
-      page: () => DetailProductView(),
+      page: () => DetailProductView(product: Get.arguments),
       binding: DetailProductBinding(),
     ),
     GetPage(

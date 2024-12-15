@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:praktikum/app/modules/register/controllers/register_controller.dart';
-import 'package:praktikum/app/routes/app_pages.dart';
 
 class RegisterView extends GetView<RegisterController> {
   const RegisterView({super.key});

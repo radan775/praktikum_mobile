@@ -27,9 +27,6 @@ class ProductCard extends StatefulWidget {
   /// A callback function triggered when the card is tapped.
   final VoidCallback? onTap;
 
-  /// A callback function triggered when the favorite button is pressed.
-  final VoidCallback? onFavoritePressed;
-
   /// Indicates whether the product is available.
   final bool? isAvailable;
 
@@ -60,7 +57,6 @@ class ProductCard extends StatefulWidget {
     required this.price,
     this.currency = '\$',
     this.onTap,
-    this.onFavoritePressed,
     this.shortDescription = '',
     this.id,
     this.isAvailable = true,
@@ -77,16 +73,10 @@ class ProductCard extends StatefulWidget {
 }
 
 class ProductCardState extends State<ProductCard> {
-  bool _isAdded = false;
-
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        if (widget.onTap != null) {
-          widget.onTap!();
-        }
-      },
+      onTap: widget.onTap,
       child: Card(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(widget.borderRadius),
@@ -96,53 +86,21 @@ class ProductCardState extends State<ProductCard> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Product image and favorite button
-            Stack(
-              children: [
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(widget.borderRadius),
-                  child: Image.network(
-                    widget.imageUrl,
-                    fit: BoxFit.cover,
+            ClipRRect(
+              borderRadius: BorderRadius.circular(widget.borderRadius),
+              child: Image.network(
+                widget.imageUrl,
+                fit: BoxFit.cover,
+                height: 170,
+                width: double.infinity,
+                errorBuilder: (context, error, stackTrace) {
+                  return Container(
                     height: 170,
                     width: double.infinity,
-                    errorBuilder: (context, error, stackTrace) {
-                      return Container(
-                        color: Colors.grey[200],
-                        height: 170,
-                        width: double.infinity,
-                        child: Center(
-                          child: Icon(
-                            Icons.image_not_supported,
-                            color: Colors.grey[600],
-                            size: 50,
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                ),
-                Positioned(
-                  top: 8,
-                  right: 8,
-                  child: IconButton(
-                    onPressed: () {
-                      setState(() {
-                        _isAdded = !_isAdded;
-                      });
-                      if (widget.onFavoritePressed != null) {
-                        widget.onFavoritePressed!();
-                      }
-                    },
-                    icon: Icon(
-                      _isAdded
-                          ? Icons.favorite_rounded
-                          : Icons.favorite_outline_rounded,
-                      color: _isAdded ? Colors.red : Colors.white,
-                    ),
-                  ),
-                ),
-              ],
+                    color: Colors.greenAccent, // Blank area
+                  );
+                },
+              ),
             ),
             // Product details
             Padding(
@@ -300,7 +258,6 @@ class ProductCardState extends State<ProductCard> {
   }
 
   String _formatPrice(double price) {
-    // Format angka dengan pemisah ribuan
     return NumberFormat.decimalPattern('id').format(price);
   }
 }

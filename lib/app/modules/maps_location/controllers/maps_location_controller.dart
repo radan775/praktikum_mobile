@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:geocoding/geocoding.dart';
 import 'package:get/get.dart';
 import 'package:geolocator/geolocator.dart';
