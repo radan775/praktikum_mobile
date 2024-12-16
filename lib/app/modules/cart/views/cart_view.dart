@@ -117,7 +117,8 @@ class CartView extends GetView<CartController> {
               ),
               // Address Section
               Container(
-                padding: const EdgeInsets.all(10),
+                padding:
+                    const EdgeInsets.only(left: 8, right: 8, bottom: 6, top: 2),
                 decoration: BoxDecoration(
                   color: Colors.grey.shade100,
                   borderRadius: BorderRadius.vertical(
@@ -125,6 +126,62 @@ class CartView extends GetView<CartController> {
                   ),
                 ),
                 child: _buildAddressSection(address),
+              ),
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.only(left: 8, right: 8, bottom: 8),
+                decoration: BoxDecoration(
+                  color: Colors.grey.shade200, // Warna background berbeda
+                  borderRadius: BorderRadius.vertical(
+                    bottom: Radius.circular(12),
+                  ),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Ambil pesanan pada:",
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black87,
+                      ),
+                    ),
+                    Text(
+                      "Waktu pengecekan belum dipilih",
+                      style: TextStyle(
+                        fontSize: 11,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.red,
+                      ),
+                    ),
+                    SizedBox(height: 8),
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          // Logika untuk memilih waktu pengecekan
+                          print("Pilih waktu pengecekan ditekan");
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Color(0xFF56ab2f),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          padding: EdgeInsets.symmetric(vertical: 8),
+                        ),
+                        child: Text(
+                          "Pilih waktu pengecekan",
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ],
           ),
@@ -181,8 +238,8 @@ class CartView extends GetView<CartController> {
           onTap: () => controller.toggleProductSelection(productName),
           child: Obx(() {
             return Container(
-              width: 22,
-              height: 22,
+              width: 20,
+              height: 20,
               decoration: BoxDecoration(
                 border: Border.all(color: Colors.black54),
                 color: controller.selectedProducts[productName] ?? false
@@ -325,8 +382,8 @@ class CartView extends GetView<CartController> {
                   });
                 },
                 child: Container(
-                  width: 24,
-                  height: 24,
+                  width: 22,
+                  height: 22,
                   decoration: BoxDecoration(
                     border: Border.all(
                       color: isBoxSelected ? Color(0xFF56ab2f) : Colors.grey,
@@ -361,7 +418,6 @@ class CartView extends GetView<CartController> {
                       color: Colors.grey.shade600,
                     ),
                   ),
-                  const SizedBox(height: 4),
                   Text(
                     "Rp 300.000",
                     style: TextStyle(
