@@ -5,6 +5,8 @@ import 'package:intl/intl.dart';
 import 'package:praktikum/app/modules/detail_product/controllers/detailproduct_controller.dart';
 import 'dart:ui' as ui;
 
+import 'package:praktikum/app/routes/app_pages.dart';
+
 class DetailProductView extends GetView<DetailproductController> {
   final Map<String, dynamic> product;
 
@@ -65,7 +67,9 @@ class DetailProductView extends GetView<DetailproductController> {
       actions: [
         IconButton(
           icon: const Icon(Icons.shopping_cart_outlined, color: Colors.black),
-          onPressed: () {},
+          onPressed: () {
+            Get.toNamed(Routes.CART);
+          },
         ),
       ],
     );
@@ -326,7 +330,7 @@ class DetailProductView extends GetView<DetailproductController> {
       child: Row(
         children: [
           ElevatedButton(
-            onPressed: () => print("TOMBOL CHAT"),
+            onPressed: () => Get.toNamed(Routes.CHAT),
             style: ElevatedButton.styleFrom(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 13),
               backgroundColor: const Color(0xFF56ab2f),
