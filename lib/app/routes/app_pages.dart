@@ -3,6 +3,8 @@ import 'package:praktikum/app/modules/bottom_navbar/bindings/navbar_bottom_bindi
 import 'package:praktikum/app/modules/bottom_navbar/views/navbar_bottom_view.dart';
 import 'package:praktikum/app/modules/cart/bindings/cart_binding.dart';
 import 'package:praktikum/app/modules/cart/views/cart_view.dart';
+import 'package:praktikum/app/modules/checking/bindings/checking_binding.dart';
+import 'package:praktikum/app/modules/checking/views/checking_view.dart';
 import 'package:praktikum/app/modules/ini_chat/bindings/ini_chat_binding.dart';
 import 'package:praktikum/app/modules/ini_chat/views/ini_chat_view.dart';
 import 'package:praktikum/app/modules/detail_product/bindings/detailproduct_binding.dart';
@@ -106,6 +108,11 @@ class AppPages {
       name: _Paths.CHAT,
       page: () => IniChatView(),
       binding: IniChatBinding(),
+    ),
+    GetPage(
+      name: _Paths.CHECKING,
+      page: () => CheckingView(),
+      binding: CheckingBinding(),
     ),
   ];
 }

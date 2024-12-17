@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:praktikum/app/modules/cart/controllers/cart_controller.dart';
+import 'package:praktikum/app/routes/app_pages.dart';
 
 class CartView extends GetView<CartController> {
   const CartView({super.key});
@@ -17,7 +18,7 @@ class CartView extends GetView<CartController> {
             fontWeight: FontWeight.bold,
           ),
         ),
-        backgroundColor: Color(0xFF56ab2f), // Ganti warna AppBar
+        backgroundColor: Color(0xFF56ab2f),
         elevation: 0,
         centerTitle: true,
       ),
@@ -39,6 +40,7 @@ class CartView extends GetView<CartController> {
                       store['storeName'] as String,
                       store['products'] as List<Map<String, String>>,
                       store['address'] as String,
+                      index,
                     );
                   },
                 );
@@ -51,8 +53,13 @@ class CartView extends GetView<CartController> {
     );
   }
 
-  Widget _buildStoreCard(CartController controller, String storeName,
-      List<Map<String, String>> products, String address) {
+  Widget _buildStoreCard(
+    CartController controller,
+    String storeName,
+    List<Map<String, String>> products,
+    String address,
+    int storeIndex,
+  ) {
     return Container(
       margin: const EdgeInsets.only(bottom: 4),
       child: Card(
@@ -81,14 +88,13 @@ class CartView extends GetView<CartController> {
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     colors: [
-                      Color(0xFF56ab2f), // Warna pertama
-                      Color(0xFF56ab2f).withOpacity(
-                          0.8), // Warna kedua dengan sedikit opacity
+                      const Color(0xFF56ab2f),
+                      const Color(0xFF56ab2f).withOpacity(0.8),
                     ],
                     begin: Alignment.centerLeft,
                     end: Alignment.centerRight,
                   ),
-                  borderRadius: BorderRadius.vertical(
+                  borderRadius: const BorderRadius.vertical(
                     top: Radius.circular(12),
                   ),
                 ),
@@ -121,7 +127,7 @@ class CartView extends GetView<CartController> {
                     const EdgeInsets.only(left: 8, right: 8, bottom: 6, top: 2),
                 decoration: BoxDecoration(
                   color: Colors.grey.shade100,
-                  borderRadius: BorderRadius.vertical(
+                  borderRadius: const BorderRadius.vertical(
                     bottom: Radius.circular(12),
                   ),
                 ),
@@ -131,15 +137,15 @@ class CartView extends GetView<CartController> {
                 width: double.infinity,
                 padding: const EdgeInsets.only(left: 8, right: 8, bottom: 8),
                 decoration: BoxDecoration(
-                  color: Colors.grey.shade200, // Warna background berbeda
-                  borderRadius: BorderRadius.vertical(
+                  color: Colors.grey.shade200,
+                  borderRadius: const BorderRadius.vertical(
                     bottom: Radius.circular(12),
                   ),
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
+                    const Text(
                       "Ambil pesanan pada:",
                       style: TextStyle(
                         fontSize: 14,
@@ -147,39 +153,127 @@ class CartView extends GetView<CartController> {
                         color: Colors.black87,
                       ),
                     ),
-                    Text(
-                      "Waktu pengecekan belum dipilih",
-                      style: TextStyle(
-                        fontSize: 11,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.red,
-                      ),
-                    ),
-                    SizedBox(height: 8),
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          // Logika untuk memilih waktu pengecekan
-                          print("Pilih waktu pengecekan ditekan");
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Color(0xFF56ab2f),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
+                    Obx(() {
+                      // Ambil jadwal untuk toko spesifik
+                      final storeSchedule =
+                          controller.selectedSchedules[storeName];
+
+                      // Memeriksa apakah ada jadwal yang dipilih untuk toko ini
+                      if (storeSchedule?['dateString'] != null &&
+                          storeSchedule?['timeSlotString'] != null) {
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                Text(
+                                  "${storeSchedule?['selectedDate']}, ", // Menampilkan selectedDate
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.normal,
+                                    color: Colors
+                                        .black87, // Warna abu-abu untuk selectedDate
+                                  ),
+                                ),
+                                Text(
+                                  "${storeSchedule?['dateString']}", // Keterangan hari dan tanggal
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.normal,
+                                    color: Colors.black87,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Text(
+                              "${storeSchedule?['timeSlotString']}", // Menampilkan waktu
+                              style: TextStyle(
+                                fontSize: 13,
+                                fontWeight: FontWeight.normal,
+                                color: Colors.black87,
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            GestureDetector(
+                              onTap: () async {
+                                final result =
+                                    await Get.toNamed(Routes.CHECKING);
+                                if (result != null) {
+                                  controller.updateSchedule(
+                                    storeName: storeName,
+                                    selectedDate: result["selectedDate"],
+                                    dateString: result["dateString"],
+                                    timeSlotString: result["timeSlotString"],
+                                  );
+                                }
+                              },
+                              child: Row(
+                                children: [
+                                  Icon(Icons.edit,
+                                      color: Colors.green.shade700, size: 18),
+                                  const SizedBox(width: 8),
+                                  Text(
+                                    "Ubah waktu",
+                                    style: TextStyle(
+                                      color: Colors.green.shade700,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        );
+                      }
+                      // Jika belum ada jadwal, tampilkan pesan dan tombol
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Waktu pengecekan belum dipilih",
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.red,
+                            ),
                           ),
-                          padding: EdgeInsets.symmetric(vertical: 8),
-                        ),
-                        child: Text(
-                          "Pilih waktu pengecekan",
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
+                          const SizedBox(height: 8),
+                          SizedBox(
+                            width: double.infinity,
+                            child: ElevatedButton(
+                              onPressed: () async {
+                                final result =
+                                    await Get.toNamed(Routes.CHECKING);
+                                if (result != null) {
+                                  controller.updateSchedule(
+                                    storeName: storeName,
+                                    selectedDate: result["selectedDate"],
+                                    dateString: result["dateString"],
+                                    timeSlotString: result["timeSlotString"],
+                                  );
+                                }
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: const Color(0xFF56ab2f),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 8),
+                              ),
+                              child: const Text(
+                                "Pilih waktu pengecekan",
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
-                    ),
+                        ],
+                      );
+                    }),
                   ],
                 ),
               ),
@@ -197,7 +291,7 @@ class CartView extends GetView<CartController> {
           return GestureDetector(
             onTap: () => controller.toggleStoreSelection(storeName),
             child: AnimatedContainer(
-              duration: Duration(milliseconds: 300),
+              duration: const Duration(milliseconds: 300),
               width: 20,
               height: 20,
               decoration: BoxDecoration(
@@ -208,19 +302,17 @@ class CartView extends GetView<CartController> {
                 borderRadius: BorderRadius.circular(8),
               ),
               child: controller.selectedStores[storeName] ?? false
-                  ? Icon(Icons.check,
-                      color: Color(0xFF56ab2f),
-                      size: 20) // Ganti warna check icon
+                  ? const Icon(Icons.check, color: Color(0xFF56ab2f), size: 20)
                   : null,
             ),
           );
         }),
-        SizedBox(width: 12),
-        Icon(Icons.store, color: Colors.white, size: 22),
-        SizedBox(width: 10),
+        const SizedBox(width: 12),
+        const Icon(Icons.store, color: Colors.white, size: 22),
+        const SizedBox(width: 10),
         Text(
           storeName,
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.bold,
             color: Colors.white,
@@ -306,7 +398,7 @@ class CartView extends GetView<CartController> {
               icon: const Icon(Icons.add, size: 16),
               splashRadius: 15,
               padding: EdgeInsets.zero,
-              constraints: BoxConstraints(),
+              constraints: const BoxConstraints(),
               tooltip: 'Tambah',
             ),
             Obx(() {
@@ -323,7 +415,7 @@ class CartView extends GetView<CartController> {
               icon: const Icon(Icons.remove, size: 16),
               splashRadius: 15,
               padding: EdgeInsets.zero,
-              constraints: BoxConstraints(),
+              constraints: const BoxConstraints(),
               tooltip: 'Kurangi',
             ),
           ],
@@ -357,9 +449,10 @@ class CartView extends GetView<CartController> {
   }
 
   Widget _buildBottomNavBar() {
-    bool isBoxSelected = false;
-    return StatefulBuilder(
-      builder: (context, setState) {
+    return GetBuilder<CartController>(
+      builder: (controller) {
+        final allSelected = controller.selectedProducts.values.every((v) => v);
+
         return Container(
           padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10),
           decoration: BoxDecoration(
@@ -369,7 +462,7 @@ class CartView extends GetView<CartController> {
                 color: Colors.grey.shade300,
                 spreadRadius: 1,
                 blurRadius: 5,
-                offset: Offset(0, -2),
+                offset: const Offset(0, -2),
               ),
             ],
           ),
@@ -377,22 +470,20 @@ class CartView extends GetView<CartController> {
             children: [
               GestureDetector(
                 onTap: () {
-                  setState(() {
-                    isBoxSelected = !isBoxSelected;
-                  });
+                  controller.toggleAllSelection(!allSelected);
                 },
                 child: Container(
                   width: 22,
                   height: 22,
                   decoration: BoxDecoration(
                     border: Border.all(
-                      color: isBoxSelected ? Color(0xFF56ab2f) : Colors.grey,
+                      color: allSelected ? Color(0xFF56ab2f) : Colors.grey,
                       width: 2,
                     ),
-                    color: isBoxSelected ? Color(0xFF56ab2f) : Colors.white,
+                    color: allSelected ? Color(0xFF56ab2f) : Colors.white,
                     borderRadius: BorderRadius.circular(6),
                   ),
-                  child: isBoxSelected
+                  child: allSelected
                       ? const Icon(Icons.check, color: Colors.white, size: 16)
                       : null,
                 ),
@@ -435,13 +526,14 @@ class CartView extends GetView<CartController> {
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Color(0xFF56ab2f),
-                  padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
                   elevation: 3,
                 ),
-                child: Text(
+                child: const Text(
                   "Bayar",
                   style: TextStyle(
                     fontSize: 16,
