@@ -3,6 +3,7 @@ import 'package:praktikum/app/modules/edit_account/bindings/edit_account_binding
 import 'package:praktikum/app/modules/edit_account/views/edit_account_view.dart';
 import 'package:praktikum/app/modules/history/bindings/history_binding.dart';
 import 'package:praktikum/app/modules/history/views/history_view.dart';
+import 'package:praktikum/app/modules/pembayaran_berhasil/views/pembayaran_berhasil_view.dart';
 import 'package:praktikum/app/modules/settings/bindings/settings_binding.dart';
 import 'package:praktikum/app/modules/settings/views/settings_view.dart';
 import 'package:praktikum/app/modules/bottom_navbar/bindings/navbar_bottom_binding.dart';
@@ -141,6 +142,11 @@ class AppPages {
       name: _Paths.EDIT_ACCOUNT,
       page: () => EditAccountView(),
       binding: EditAccountBinding(),
+    ),
+    GetPage(
+      name: _Paths.PAYMENT_SUCCESS,
+      page: () => PembayaranBerhasilView(),
+      binding: PembayaranBinding(),
     ),
   ];
 }
