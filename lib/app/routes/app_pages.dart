@@ -1,4 +1,8 @@
 import 'package:get/get.dart';
+import 'package:praktikum/app/modules/history/bindings/history_binding.dart';
+import 'package:praktikum/app/modules/history/views/history_view.dart';
+import 'package:praktikum/app/modules/settings/bindings/settings_binding.dart';
+import 'package:praktikum/app/modules/settings/views/settings_view.dart';
 import 'package:praktikum/app/modules/bottom_navbar/bindings/navbar_bottom_binding.dart';
 import 'package:praktikum/app/modules/bottom_navbar/views/navbar_bottom_view.dart';
 import 'package:praktikum/app/modules/cart/bindings/cart_binding.dart';
@@ -120,6 +124,16 @@ class AppPages {
       name: _Paths.PAYMENT_METHOD,
       page: () => PembayaranView(),
       binding: PembayaranBinding(),
+    ),
+    GetPage(
+      name: _Paths.ACCOUNTS,
+      page: () => SettingsView(),
+      binding: SettingsBinding(),
+    ),
+    GetPage(
+      name: _Paths.HISTORY,
+      page: () => HistoryView(),
+      binding: HistoryBinding(),
     ),
   ];
 }

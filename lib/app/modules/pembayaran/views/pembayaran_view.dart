@@ -77,88 +77,93 @@ class PembayaranView extends GetView<PembayaranController> {
               ),
             ),
           ),
-          // Payment Method List
           Expanded(
-            child: Obx(() {
-              // Obx untuk memastikan reaktivitas
-              return ListView.builder(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                itemCount: controller.paymentMethods.length,
-                itemBuilder: (context, index) {
-                  final method = controller.paymentMethods[index];
-                  final isSelected =
-                      controller.selectedPaymentMethod.value == method;
+            child: Obx(
+              () {
+                return ListView.builder(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  itemCount: controller.paymentMethods.length,
+                  itemBuilder: (context, index) {
+                    final method = controller.paymentMethods[index];
+                    final isSelected =
+                        controller.selectedPaymentMethod.value == method;
 
-                  return InkWell(
-                    onTap: () {
-                      controller.selectPaymentMethod(method);
-                    },
-                    borderRadius: BorderRadius.circular(12),
-                    child: Container(
-                      margin: const EdgeInsets.only(bottom: 8),
-                      decoration: BoxDecoration(
-                        color: isSelected
-                            ? const Color(0xFF56ab2f)
-                                .withOpacity(0.1) // Latar belakang dipilih
-                            : Colors.white,
-                        borderRadius: BorderRadius.circular(12),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.shade200,
-                            blurRadius: 10,
-                            offset: const Offset(0, 4),
-                          ),
-                        ],
-                        border: Border.all(
+                    return InkWell(
+                      onTap: () {
+                        // Toggle method pembayaran
+                        if (isSelected) {
+                          controller.selectedPaymentMethod.value =
+                              ''; // Unselect
+                        } else {
+                          controller.selectPaymentMethod(method);
+                        }
+                      },
+                      borderRadius: BorderRadius.circular(12),
+                      child: Container(
+                        margin: const EdgeInsets.only(bottom: 8),
+                        decoration: BoxDecoration(
                           color: isSelected
-                              ? const Color(
-                                  0xFF56ab2f) // Border hijau jika dipilih
-                              : Colors.transparent,
-                          width: 2,
-                        ),
-                      ),
-                      child: Row(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(12.0),
-                            child: Icon(
-                              isSelected
-                                  ? Icons.check_circle
-                                  : Icons.circle_outlined,
-                              color: isSelected
-                                  ? const Color(0xFF56ab2f)
-                                  : Colors.grey.shade400,
-                              size: 24,
+                              ? const Color(0xFF56ab2f).withOpacity(0.1)
+                              : Colors.white,
+                          borderRadius: BorderRadius.circular(12),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.shade200,
+                              blurRadius: 10,
+                              offset: const Offset(0, 4),
                             ),
+                          ],
+                          border: Border.all(
+                            color: isSelected
+                                ? const Color(
+                                    0xFF56ab2f) // Border hijau jika dipilih
+                                : Colors.transparent,
+                            width: 2,
                           ),
-                          Expanded(
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 12),
-                              child: Text(
-                                method,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 16,
-                                  color: isSelected
-                                      ? const Color(
-                                          0xFF56ab2f) // Teks hijau jika dipilih
-                                      : Colors.black87,
+                        ),
+                        child: Row(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(12.0),
+                              child: Icon(
+                                isSelected
+                                    ? Icons.check_circle
+                                    : Icons.circle_outlined,
+                                color: isSelected
+                                    ? const Color(0xFF56ab2f)
+                                    : Colors.grey.shade400,
+                                size: 24,
+                              ),
+                            ),
+                            Expanded(
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 12),
+                                child: Text(
+                                  method,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 16,
+                                    color: isSelected
+                                        ? const Color(0xFF56ab2f)
+                                        : Colors.black87,
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                          Icon(
-                            Icons.payment_outlined,
-                            color: const Color(0xFF56ab2f).withOpacity(0.7),
-                          ),
-                          const SizedBox(width: 8),
-                        ],
+                            Icon(
+                              Icons.payment_outlined,
+                              color: const Color(0xFF56ab2f).withOpacity(0.7),
+                            ),
+                            const SizedBox(width: 8),
+                          ],
+                        ),
                       ),
-                    ),
-                  );
-                },
-              );
-            }),
+                    );
+                  },
+                );
+              },
+            ),
           ),
         ],
       ),

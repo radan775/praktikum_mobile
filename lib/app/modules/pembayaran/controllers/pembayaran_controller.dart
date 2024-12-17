@@ -26,6 +26,10 @@ class PembayaranController extends GetxController {
     update();
   }
 
+  void refreshPaymentMethods() {
+    update(); // Memuat ulang Obx dan widget terkait
+  }
+
   String generateRandomOrderNumber() {
     final random1 = Random().nextInt(900000) + 100000;
     final random2 = Random().nextInt(900000) + 100000;

@@ -3,6 +3,8 @@ import 'package:get/get.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:praktikum/app/modules/history/views/history_view.dart';
+import 'package:praktikum/app/modules/settings/views/settings_view.dart';
 import 'package:praktikum/app/modules/bottom_navbar/controllers/navbar_bottom_controller.dart';
 import 'package:praktikum/app/modules/home/views/home_view.dart';
 
@@ -15,8 +17,8 @@ class NavbarView extends GetView<NavbarController> {
   Widget build(BuildContext context) {
     var pages = [
       HomeView(currentLatLng: currentLatLng),
-      const Center(child: Text('History View')),
-      const Center(child: Text('Account View')),
+      HistoryView(),
+      SettingsView(),
     ];
     return Scaffold(
       body: Obx(() {
@@ -65,7 +67,7 @@ class NavbarView extends GetView<NavbarController> {
             tabs: [
               const GButton(icon: LineIcons.home, text: 'Home'),
               const GButton(icon: LineIcons.history, text: 'History'),
-              const GButton(icon: Icons.account_box_rounded, text: 'Account'),
+              const GButton(icon: Icons.settings, text: 'Settings'),
             ],
             selectedIndex: controller.selectedIndex.value,
             onTabChange: (index) => controller.changeTab(index),
