@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:praktikum/app/modules/settings/controllers/settings_controller.dart';
+import 'package:praktikum/app/routes/app_pages.dart';
 
 class SettingsView extends GetView<SettingsController> {
   const SettingsView({super.key});
@@ -104,7 +105,7 @@ class SettingsView extends GetView<SettingsController> {
                   // Icon Edit
                   IconButton(
                     onPressed: () {
-                      print("Edit Akun");
+                      Get.toNamed(Routes.EDIT_ACCOUNT);
                     },
                     icon: const Icon(
                       Icons.edit,

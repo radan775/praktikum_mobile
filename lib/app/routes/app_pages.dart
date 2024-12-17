@@ -1,4 +1,6 @@
 import 'package:get/get.dart';
+import 'package:praktikum/app/modules/edit_account/bindings/edit_account_binding.dart';
+import 'package:praktikum/app/modules/edit_account/views/edit_account_view.dart';
 import 'package:praktikum/app/modules/history/bindings/history_binding.dart';
 import 'package:praktikum/app/modules/history/views/history_view.dart';
 import 'package:praktikum/app/modules/settings/bindings/settings_binding.dart';
@@ -134,6 +136,11 @@ class AppPages {
       name: _Paths.HISTORY,
       page: () => HistoryView(),
       binding: HistoryBinding(),
+    ),
+    GetPage(
+      name: _Paths.EDIT_ACCOUNT,
+      page: () => EditAccountView(),
+      binding: EditAccountBinding(),
     ),
   ];
 }

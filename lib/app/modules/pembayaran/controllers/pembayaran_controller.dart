@@ -2,7 +2,7 @@ import 'dart:math';
 import 'package:get/get.dart';
 
 class PembayaranController extends GetxController {
-  // List metode pembayaran
+  // List metode pembayaran sebagai observable
   final paymentMethods = <String>[
     'DANA',
     'Gopay',
@@ -13,21 +13,25 @@ class PembayaranController extends GetxController {
     'BCA Virtual Account',
   ].obs;
 
-  // Variabel untuk menyimpan metode pembayaran yang dipilih
+  // Variabel observable untuk metode pembayaran yang dipilih
   final selectedPaymentMethod = ''.obs;
+
+  // Observable untuk total belanja
+  final totalBelanja = 'Rp 350.000'.obs;
+
+  // Observable untuk nomor pesanan
+  final orderNumber = ''.obs;
+
+  @override
+  void onInit() {
+    super.onInit();
+    // Generate nomor pesanan saat controller diinisialisasi
+    orderNumber.value = 'K-${generateRandomOrderNumber()}';
+  }
 
   // Fungsi untuk memilih metode pembayaran
   void selectPaymentMethod(String method) {
-    if (selectedPaymentMethod.value == method) {
-      selectedPaymentMethod.value = '';
-    } else {
-      selectedPaymentMethod.value = method; // Pilih metode
-    }
-    update();
-  }
-
-  void refreshPaymentMethods() {
-    update(); // Memuat ulang Obx dan widget terkait
+    selectedPaymentMethod.value = method;
   }
 
   String generateRandomOrderNumber() {
