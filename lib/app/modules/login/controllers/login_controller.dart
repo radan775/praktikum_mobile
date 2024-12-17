@@ -1,60 +1,59 @@
 import 'package:get/get.dart';
 
 class LoginController extends GetxController {
-  var phoneNumber = ''.obs;
+  var email = ''.obs; // Ganti phoneNumber dengan email
   var password = ''.obs;
-
-  // Observable untuk mengontrol visibilitas password
   var isPasswordHidden = true.obs;
-
-  // Observable untuk menampilkan indikator loading
   var isLoading = false.obs;
 
   Future<void> login() async {
-    if (phoneNumber.value.isEmpty || password.value.isEmpty) {
+    if (email.value.isEmpty || password.value.isEmpty) {
       Get.snackbar(
         'Error',
-        'Nomor HP dan password harus diisi',
-        snackPosition: SnackPosition.BOTTOM,
+        'Email dan password harus diisi',
+        snackPosition: SnackPosition.TOP,
+      );
+      return;
+    }
+
+    // Validasi format email
+    if (!GetUtils.isEmail(email.value)) {
+      Get.snackbar(
+        'Error',
+        'Format email tidak valid',
+        snackPosition: SnackPosition.TOP,
       );
       return;
     }
 
     try {
       isLoading.value = true;
-
       // Simulasi proses login (contoh penggunaan API)
       await Future.delayed(const Duration(seconds: 2));
-
-      //Get.toNamed(Routes.HOME);
       print("berhasil login");
+      // Get.toNamed(Routes.HOME); // Uncomment untuk navigasi ke HOME
     } catch (e) {
-      // Tampilkan pesan error
       Get.snackbar(
         'Login Gagal',
-        'Periksa kembali nomor HP dan password Anda.',
-        snackPosition: SnackPosition.BOTTOM,
+        'Periksa kembali email dan password Anda.',
+        snackPosition: SnackPosition.TOP,
       );
     } finally {
       isLoading.value = false;
     }
   }
 
-  // Fungsi untuk login menggunakan Google
   Future<void> loginWithGoogle() async {
     try {
       isLoading.value = true;
       await Future.delayed(const Duration(seconds: 2));
-
-      // Jika login berhasil, navigasikan ke halaman HOME
-      //Get.toNamed(Routes.HOME);
       print("berhasil login dengan google");
+      // Get.toNamed(Routes.HOME); // Uncomment untuk navigasi ke HOME
     } catch (e) {
-      // Tampilkan pesan error
       Get.snackbar(
         'Login Gagal',
         'Login dengan Google tidak berhasil.',
-        snackPosition: SnackPosition.BOTTOM,
+        snackPosition: SnackPosition.TOP,
       );
     } finally {
       isLoading.value = false;
