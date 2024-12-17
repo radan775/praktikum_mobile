@@ -5,19 +5,21 @@ import 'package:praktikum/app/routes/app_pages.dart';
 class RegisterController extends GetxController {
   // Text Editing Controllers untuk input form
   final nameController = TextEditingController();
-  final phoneController = TextEditingController();
+  final emailController =
+      TextEditingController(); // Ganti phoneController dengan emailController
   final passwordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
 
   // Method untuk validasi dan proses pendaftaran
   void register() {
     final name = nameController.text.trim();
-    final phone = phoneController.text.trim();
+    final email =
+        emailController.text.trim(); // Ambil email dari emailController
     final password = passwordController.text;
     final confirmPassword = confirmPasswordController.text;
 
     if (name.isEmpty ||
-        phone.isEmpty ||
+        email.isEmpty ||
         password.isEmpty ||
         confirmPassword.isEmpty) {
       Get.snackbar(
@@ -41,10 +43,11 @@ class RegisterController extends GetxController {
       return;
     }
 
-    if (phone.length < 10) {
+    // Validasi email
+    if (!GetUtils.isEmail(email)) {
       Get.snackbar(
         "Error",
-        "Nomor HP minimal 10 digit!",
+        "Format email tidak valid!",
         snackPosition: SnackPosition.TOP,
         backgroundColor: Colors.red,
         colorText: Colors.white,
@@ -62,7 +65,6 @@ class RegisterController extends GetxController {
     );
 
     // Simpan data atau lanjut ke halaman berikutnya
-    // Contoh: Navigasi ke halaman login
     Get.offAllNamed(Routes.LOGIN);
   }
 
@@ -70,7 +72,7 @@ class RegisterController extends GetxController {
   void onClose() {
     // Dispose semua controller
     nameController.dispose();
-    phoneController.dispose();
+    emailController.dispose(); // Dispose emailController
     passwordController.dispose();
     confirmPasswordController.dispose();
     super.onClose();

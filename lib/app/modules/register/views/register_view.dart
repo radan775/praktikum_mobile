@@ -38,19 +38,16 @@ class RegisterView extends GetView<RegisterController> {
                   ),
                 ),
                 const SizedBox(height: 16),
-                // Input Nomor HP
+                // Input Email
                 TextField(
-                  controller: controller.phoneController,
+                  controller: controller.emailController,
                   decoration: InputDecoration(
-                    labelText: 'Nomor HP',
+                    labelText: 'Email',
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
                   ),
-                  keyboardType: TextInputType.number,
-                  inputFormatters: <TextInputFormatter>[
-                    FilteringTextInputFormatter.digitsOnly,
-                  ],
+                  keyboardType: TextInputType.emailAddress,
                 ),
                 const SizedBox(height: 16),
                 // Input Password

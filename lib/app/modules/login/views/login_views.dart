@@ -21,15 +21,17 @@ class LoginView extends GetView<LoginController> {
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 30),
+            // Input Email
             TextField(
               decoration: InputDecoration(
-                labelText: 'Nomor HP',
+                labelText: 'Email', // Ganti label
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8.0),
                 ),
               ),
-              keyboardType: TextInputType.phone,
-              onChanged: (value) => controller.phoneNumber.value = value,
+              keyboardType: TextInputType.emailAddress, // Ganti keyboard type
+              onChanged: (value) => controller.email.value =
+                  value, // Ganti phoneNumber dengan email
             ),
             const SizedBox(height: 16),
             Obx(
@@ -74,8 +76,7 @@ class LoginView extends GetView<LoginController> {
                   ? const Center(child: CircularProgressIndicator())
                   : GestureDetector(
                       onTap: () {
-                        print("LOGIN PRESSED");
-                        Get.toNamed(Routes.GEOLOCATION);
+                        controller.login(); // Panggil fungsi login
                       },
                       child: Container(
                         height: 50,
