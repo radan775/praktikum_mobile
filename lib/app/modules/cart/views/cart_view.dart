@@ -522,7 +522,7 @@ class CartView extends GetView<CartController> {
               const SizedBox(width: 16),
               ElevatedButton(
                 onPressed: () {
-                  print("Bayar ditekan");
+                  Get.toNamed(Routes.PAYMENT_METHOD);
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Color(0xFF56ab2f),

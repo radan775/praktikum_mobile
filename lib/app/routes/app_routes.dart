@@ -18,6 +18,7 @@ abstract class Routes {
   static const CART = _Paths.CART;
   static const CHAT = _Paths.CHAT;
   static const CHECKING = _Paths.CHECKING;
+  static const PAYMENT_METHOD = _Paths.PAYMENT_METHOD;
 }
 
 abstract class _Paths {
@@ -37,4 +38,5 @@ abstract class _Paths {
   static const CART = '/cart';
   static const CHAT = '/chat';
   static const CHECKING = '/checking';
+  static const PAYMENT_METHOD = '/payment_method';
 }

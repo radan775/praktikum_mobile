@@ -21,6 +21,8 @@ import 'package:praktikum/app/modules/maps_location/bindings/maps_location_bindi
 import 'package:praktikum/app/modules/maps_location/views/maps_location_view.dart';
 import 'package:praktikum/app/modules/mikrofon/bindings/mikrofon_binding.dart';
 import 'package:praktikum/app/modules/mikrofon/views/mikrofon_views.dart';
+import 'package:praktikum/app/modules/pembayaran/bindings/pembayaran_binding.dart';
+import 'package:praktikum/app/modules/pembayaran/views/pembayaran_view.dart';
 import 'package:praktikum/app/modules/register/bindings/register_binding.dart';
 import 'package:praktikum/app/modules/register/views/register_view.dart';
 import 'package:praktikum/app/modules/reset_password/bindings/reset_password_binding.dart';
@@ -113,6 +115,11 @@ class AppPages {
       name: _Paths.CHECKING,
       page: () => CheckingView(),
       binding: CheckingBinding(),
+    ),
+    GetPage(
+      name: _Paths.PAYMENT_METHOD,
+      page: () => PembayaranView(),
+      binding: PembayaranBinding(),
     ),
   ];
 }
