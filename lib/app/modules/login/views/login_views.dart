@@ -75,7 +75,7 @@ class LoginView extends GetView<LoginController> {
               () => controller.isLoading.value
                   ? const Center(child: CircularProgressIndicator())
                   : GestureDetector(
-                      onTap: () {
+                      onTap: () async {
                         controller.login(); // Panggil fungsi login
                       },
                       child: Container(

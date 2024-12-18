@@ -1,10 +1,14 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
+import 'package:praktikum/app/routes/app_pages.dart';
 
 class LoginController extends GetxController {
-  var email = ''.obs; // Ganti phoneNumber dengan email
+  var email = ''.obs;
   var password = ''.obs;
   var isPasswordHidden = true.obs;
   var isLoading = false.obs;
+
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   Future<void> login() async {
     if (email.value.isEmpty || password.value.isEmpty) {
@@ -28,33 +32,35 @@ class LoginController extends GetxController {
 
     try {
       isLoading.value = true;
-      // Simulasi proses login (contoh penggunaan API)
-      await Future.delayed(const Duration(seconds: 2));
-      print("berhasil login");
-      // Get.toNamed(Routes.HOME); // Uncomment untuk navigasi ke HOME
-    } catch (e) {
-      Get.snackbar(
-        'Login Gagal',
-        'Periksa kembali email dan password Anda.',
-        snackPosition: SnackPosition.TOP,
-      );
-    } finally {
-      isLoading.value = false;
-    }
-  }
 
-  Future<void> loginWithGoogle() async {
-    try {
-      isLoading.value = true;
-      await Future.delayed(const Duration(seconds: 2));
-      print("berhasil login dengan google");
-      // Get.toNamed(Routes.HOME); // Uncomment untuk navigasi ke HOME
+      // Query untuk mencari user berdasarkan email
+      QuerySnapshot querySnapshot = await _firestore
+          .collection('users')
+          .where('email', isEqualTo: email.value)
+          .limit(1)
+          .get();
+
+      if (querySnapshot.docs.isNotEmpty) {
+        final userData =
+            querySnapshot.docs.first.data() as Map<String, dynamic>;
+
+        // Cek password
+        if (userData['password'] == password.value) {
+          Get.snackbar('Sukses', 'Login berhasil');
+
+          // Simpan data pengguna jika perlu
+          print("User data: $userData");
+
+          // Navigasi ke halaman home
+          Get.offAllNamed(Routes.GEOLOCATION, arguments: userData);
+        } else {
+          Get.snackbar('Error', 'Password salah');
+        }
+      } else {
+        Get.snackbar('Error', 'Email tidak ditemukan');
+      }
     } catch (e) {
-      Get.snackbar(
-        'Login Gagal',
-        'Login dengan Google tidak berhasil.',
-        snackPosition: SnackPosition.TOP,
-      );
+      Get.snackbar('Login Gagal', e.toString());
     } finally {
       isLoading.value = false;
     }
